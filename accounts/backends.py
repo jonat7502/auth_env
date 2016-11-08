@@ -1,7 +1,7 @@
 from models import User
 
-class EmailAuth(object):
 
+class EmailAuth(object):
     def authenticate(self, email=None, password=None):
         """
         get an instance of User using the supplied email and check itspassword
@@ -11,5 +11,5 @@ class EmailAuth(object):
             if user.check_password(password):
                 return user
 
-            except User.DoesNotExist:
+        except User.DoesNotExist:
             return None

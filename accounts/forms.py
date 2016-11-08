@@ -3,15 +3,26 @@ from django.contrib.auth.forms import UserCreationForm
 from accounts.models import User
 from django.core.exceptions import ValidationError
 
+
 class UserRegistrationForm(UserCreationForm):
-    password1 = forms.Charfield(
-        label = 'Password',
-        widget = forms.PasswordInput
+
+    MONTH_CHOICES = [(i, i) for i in xrange(1, 12)]
+    YEAR_CHOICES = [(i, i) for i in xrange(2015, 2036)]
+
+    credit_card_number = forms.CharField(label='credit card number')
+    cvv = forms.CharField(label='security code (CVV)')
+    expiry_month = forms.ChoiceField(label="month", choices=MONTH_CHOICES)
+    expiry_year = forms.ChoiceField(label="year", choices=YEAR_CHOICES)
+    stripe_id = forms.CharField(widget=forms.HiddenInput)
+
+    password1 = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput
     )
 
-    password2 = forms.Charfield(
-        label = 'Password Confirmation',
-        widget = forms.PasswordInput
+    password2 = forms.CharField(
+        label='Password Confirmation',
+        widget=forms.PasswordInput
     )
 
     class Meta:
@@ -37,3 +48,9 @@ class UserRegistrationForm(UserCreationForm):
             instance.save()
 
         return instance
+
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
